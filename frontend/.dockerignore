@@ -9,10 +9,10 @@ pnpm-debug.log
 dist
 build
 
-# Environment files
-.env
-.env.local
-.env.*.local
+# Environment files (Allowed for Cloud Run build)
+#! .env
+#! .env.local
+#! .env.*.local
 
 # IDE
 .vscode
