@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext.jsx'
 import MapView from '../components/MapView.jsx'
 import LoginModal from '../components/LoginModal.jsx'
 import Loader from '../components/Loader.jsx'
-import { Ambulance, Shield, Stethoscope, Siren, MapPin, Clock, Navigation, Star, Filter, ChevronRight, Phone } from 'lucide-react'
+import { Ambulance, Shield, Stethoscope, Siren, MapPin, Clock, Navigation, Star, Filter, ChevronRight, Phone, Pill } from 'lucide-react'
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080'
 
@@ -218,119 +218,72 @@ export default function Home() {
           <button
             onClick={() => handleServiceTypeChange('hospital')}
             disabled={loading}
-            className={`p-4 rounded-2xl text-center transition-colors ${
+            className={`p-4 rounded-2xl text-center transition-all duration-200 border-2 ${
               serviceType === 'hospital'
-                ? 'bg-gradient-to-br from-red-500 to-red-600 text-white shadow-md'
-                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                ? 'bg-red-500 border-red-500 text-white shadow-lg shadow-red-200 dark:shadow-none'
+                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border-gray-100 dark:border-gray-700 hover:border-red-200 dark:hover:border-red-900/30 hover:bg-red-50/50 dark:hover:bg-red-900/10'
             } ${loading ? 'opacity-60' : ''}`}
           >
-            <div className={`w-14 h-14 mx-auto rounded-xl flex items-center justify-center mb-2 overflow-hidden ${
-              serviceType === 'hospital' ? 'bg-white/20' : 'bg-red-100 dark:bg-red-900/30'
+            <div className={`w-14 h-14 mx-auto rounded-full flex items-center justify-center mb-2 transition-colors ${
+              serviceType === 'hospital' ? 'bg-white/20' : 'bg-red-50 dark:bg-red-900/20 text-red-500'
             }`}>
-              {/* Hospital Illustration */}
-              <svg viewBox="0 0 64 64" className="w-10 h-10">
-                <rect x="12" y="20" width="40" height="36" rx="4" fill="#ef4444" opacity="0.2"/>
-                <rect x="20" y="8" width="24" height="20" rx="2" fill="#ef4444"/>
-                <rect x="28" y="12" width="8" height="4" rx="1" fill="white"/>
-                <rect x="30" y="10" width="4" height="4" rx="1" fill="white"/>
-                <rect x="30" y="16" width="4" height="4" rx="1" fill="white"/>
-                <rect x="16" y="32" width="12" height="12" rx="2" fill="white" opacity="0.9"/>
-                <rect x="36" y="32" width="12" height="12" rx="2" fill="white" opacity="0.9"/>
-                <rect x="16" y="48" width="32" height="8" rx="2" fill="white" opacity="0.9"/>
-                <circle cx="52" cy="16" r="8" fill="#fbbf24"/>
-                <path d="M48 16 L52 12 L56 16 L52 20 Z" fill="#f59e0b"/>
-              </svg>
+              <Siren size={28} strokeWidth={2.5} />
             </div>
-            <span className="text-sm font-semibold">Hospitals</span>
+            <span className="text-sm font-bold">Hospitals</span>
             <span className="block text-[10px] opacity-80 mt-0.5">{serviceCounts.hospital} nearby</span>
           </button>
 
           <button
             onClick={() => handleServiceTypeChange('police')}
             disabled={loading}
-            className={`p-4 rounded-2xl text-center transition-colors ${
+            className={`p-4 rounded-2xl text-center transition-all duration-200 border-2 ${
               serviceType === 'police'
-                ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md'
-                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                ? 'bg-blue-500 border-blue-500 text-white shadow-lg shadow-blue-200 dark:shadow-none'
+                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-900/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/10'
             } ${loading ? 'opacity-60' : ''}`}
           >
-            <div className={`w-14 h-14 mx-auto rounded-xl flex items-center justify-center mb-2 overflow-hidden ${
-              serviceType === 'police' ? 'bg-white/20' : 'bg-blue-100 dark:bg-blue-900/30'
+            <div className={`w-14 h-14 mx-auto rounded-full flex items-center justify-center mb-2 transition-colors ${
+              serviceType === 'police' ? 'bg-white/20' : 'bg-blue-50 dark:bg-blue-900/20 text-blue-500'
             }`}>
-              {/* Police Illustration */}
-              <svg viewBox="0 0 64 64" className="w-10 h-10">
-                <rect x="8" y="24" width="48" height="32" rx="4" fill="#3b82f6" opacity="0.2"/>
-                <path d="M32 8 L48 20 L48 28 L16 28 L16 20 Z" fill="#3b82f6"/>
-                <rect x="20" y="28" width="24" height="20" rx="2" fill="#3b82f6"/>
-                <rect x="24" y="32" width="6" height="6" rx="1" fill="white" opacity="0.9"/>
-                <rect x="34" y="32" width="6" height="6" rx="1" fill="white" opacity="0.9"/>
-                <rect x="28" y="42" width="8" height="8" rx="1" fill="white" opacity="0.9"/>
-                <circle cx="16" cy="48" r="6" fill="#1f2937"/>
-                <circle cx="48" cy="48" r="6" fill="#1f2937"/>
-                <rect x="28" y="12" width="8" height="4" rx="1" fill="#fbbf24"/>
-              </svg>
+              <Shield size={28} strokeWidth={2.5} />
             </div>
-            <span className="text-sm font-semibold">Police</span>
+            <span className="text-sm font-bold">Police</span>
             <span className="block text-[10px] opacity-80 mt-0.5">{serviceCounts.police} nearby</span>
           </button>
 
           <button
             onClick={() => handleServiceTypeChange('doctor')}
             disabled={loading}
-            className={`p-4 rounded-2xl text-center transition-colors ${
+            className={`p-4 rounded-2xl text-center transition-all duration-200 border-2 ${
               serviceType === 'doctor'
-                ? 'bg-gradient-to-br from-amber-500 to-amber-600 text-white shadow-md'
-                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                ? 'bg-amber-500 border-amber-500 text-white shadow-lg shadow-amber-200 dark:shadow-none'
+                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border-gray-100 dark:border-gray-700 hover:border-amber-200 dark:hover:border-amber-900/30 hover:bg-amber-50/50 dark:hover:bg-amber-900/10'
             } ${loading ? 'opacity-60' : ''}`}
           >
-            <div className={`w-14 h-14 mx-auto rounded-xl flex items-center justify-center mb-2 overflow-hidden ${
-              serviceType === 'doctor' ? 'bg-white/20' : 'bg-amber-100 dark:bg-amber-900/30'
+            <div className={`w-14 h-14 mx-auto rounded-full flex items-center justify-center mb-2 transition-colors ${
+              serviceType === 'doctor' ? 'bg-white/20' : 'bg-amber-50 dark:bg-amber-900/20 text-amber-500'
             }`}>
-              {/* Doctor Illustration */}
-              <svg viewBox="0 0 64 64" className="w-10 h-10">
-                <circle cx="32" cy="16" r="12" fill="#f59e0b" opacity="0.3"/>
-                <circle cx="32" cy="14" r="8" fill="#f59e0b"/>
-                <rect x="24" y="24" width="16" height="20" rx="4" fill="white" stroke="#f59e0b" strokeWidth="2"/>
-                <rect x="20" y="28" width="24" height="28" rx="4" fill="#f59e0b" opacity="0.2"/>
-                <circle cx="26" cy="40" r="3" fill="#f59e0b"/>
-                <circle cx="38" cy="40" r="3" fill="#f59e0b"/>
-                <path d="M28 48 Q32 52 36 48" stroke="#f59e0b" strokeWidth="2" fill="none"/>
-                <rect x="30" y="20" width="4" height="8" rx="1" fill="#f59e0b"/>
-                <rect x="28" y="22" width="8" height="4" rx="1" fill="#f59e0b"/>
-              </svg>
+              <Stethoscope size={28} strokeWidth={2.5} />
             </div>
-            <span className="text-sm font-semibold">Doctors</span>
+            <span className="text-sm font-bold">Doctors</span>
             <span className="block text-[10px] opacity-80 mt-0.5">{serviceCounts.doctor} nearby</span>
           </button>
 
           <button
             onClick={() => handleServiceTypeChange('pharmacy')}
             disabled={loading}
-            className={`p-4 rounded-2xl text-center transition-colors ${
+            className={`p-4 rounded-2xl text-center transition-all duration-200 border-2 ${
               serviceType === 'pharmacy'
-                ? 'bg-gradient-to-br from-green-500 to-green-600 text-white shadow-md'
-                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                ? 'bg-green-500 border-green-500 text-white shadow-lg shadow-green-200 dark:shadow-none'
+                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border-gray-100 dark:border-gray-700 hover:border-green-200 dark:hover:border-green-900/30 hover:bg-green-50/50 dark:hover:bg-green-900/10'
             } ${loading ? 'opacity-60' : ''}`}
           >
-            <div className={`w-14 h-14 mx-auto rounded-xl flex items-center justify-center mb-2 overflow-hidden ${
-              serviceType === 'pharmacy' ? 'bg-white/20' : 'bg-green-100 dark:bg-green-900/30'
+            <div className={`w-14 h-14 mx-auto rounded-full flex items-center justify-center mb-2 transition-colors ${
+              serviceType === 'pharmacy' ? 'bg-white/20' : 'bg-green-50 dark:bg-green-900/20 text-green-500'
             }`}>
-              {/* Pharmacy Illustration */}
-              <svg viewBox="0 0 64 64" className="w-10 h-10">
-                <rect x="12" y="20" width="40" height="36" rx="4" fill="#22c55e" opacity="0.2"/>
-                <rect x="16" y="24" width="32" height="28" rx="2" fill="#22c55e"/>
-                <rect x="20" y="28" width="10" height="14" rx="1" fill="white" opacity="0.9"/>
-                <rect x="34" y="28" width="10" height="14" rx="1" fill="white" opacity="0.9"/>
-                <rect x="26" y="44" width="12" height="4" rx="1" fill="white" opacity="0.9"/>
-                <rect x="28" y="8" width="8" height="16" rx="2" fill="#f59e0b"/>
-                <rect x="30" y="10" width="4" height="4" rx="1" fill="white"/>
-                <rect x="30" y="16" width="4" height="4" rx="1" fill="white"/>
-                <circle cx="48" cy="16" r="8" fill="#3b82f6" opacity="0.3"/>
-                <rect x="44" y="12" width="8" height="2" rx="1" fill="#3b82f6"/>
-                <rect x="46" y="10" width="4" height="6" rx="1" fill="#3b82f6"/>
-              </svg>
+              <Pill size={28} strokeWidth={2.5} />
             </div>
-            <span className="text-sm font-semibold">Pharmacy</span>
+            <span className="text-sm font-bold">Pharmacy</span>
             <span className="block text-[10px] opacity-80 mt-0.5">{serviceCounts.pharmacy} nearby</span>
           </button>
         </div>

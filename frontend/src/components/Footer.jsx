@@ -38,29 +38,29 @@ export default function Footer() {
 
         {/* Quick Links */}
         <div className="grid grid-cols-4 gap-3">
-          <Link to="/privacy" className="flex flex-col items-center gap-1.5 text-center py-2">
-            <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-400">
-              <Shield size={18} />
+          <Link to="/privacy" className="group flex flex-col items-center gap-1.5 text-center py-2">
+            <div className="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-400 group-hover:bg-red-50 dark:group-hover:bg-red-900/20 group-hover:text-red-500 transition-all duration-200">
+              <Shield size={20} />
             </div>
-            <span className="text-[11px] text-gray-600 dark:text-gray-400 font-medium">Privacy</span>
+            <span className="text-[11px] text-gray-600 dark:text-gray-400 font-medium group-hover:text-red-600 transition-colors">Privacy</span>
           </Link>
-          <Link to="/terms" className="flex flex-col items-center gap-1.5 text-center py-2">
-            <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-400">
-              <FileText size={18} />
+          <Link to="/terms" className="group flex flex-col items-center gap-1.5 text-center py-2">
+            <div className="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-400 group-hover:bg-red-50 dark:group-hover:bg-red-900/20 group-hover:text-red-500 transition-all duration-200">
+              <FileText size={20} />
             </div>
-            <span className="text-[11px] text-gray-600 dark:text-gray-400 font-medium">Terms</span>
+            <span className="text-[11px] text-gray-600 dark:text-gray-400 font-medium group-hover:text-red-600 transition-colors">Terms</span>
           </Link>
-          <Link to="/docs" className="flex flex-col items-center gap-1.5 text-center py-2">
-            <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-400">
-              <BookOpen size={18} />
+          <Link to="/docs" className="group flex flex-col items-center gap-1.5 text-center py-2">
+            <div className="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-400 group-hover:bg-red-50 dark:group-hover:bg-red-900/20 group-hover:text-red-500 transition-all duration-200">
+              <BookOpen size={20} />
             </div>
-            <span className="text-[11px] text-gray-600 dark:text-gray-400 font-medium">Docs</span>
+            <span className="text-[11px] text-gray-600 dark:text-gray-400 font-medium group-hover:text-red-600 transition-colors">Docs</span>
           </Link>
-          <Link to="/faqs" className="flex flex-col items-center gap-1.5 text-center py-2">
-            <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-400">
-              <HelpCircle size={18} />
+          <Link to="/faqs" className="group flex flex-col items-center gap-1.5 text-center py-2">
+            <div className="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-400 group-hover:bg-red-50 dark:group-hover:bg-red-900/20 group-hover:text-red-500 transition-all duration-200">
+              <HelpCircle size={20} />
             </div>
-            <span className="text-[11px] text-gray-600 dark:text-gray-400 font-medium">FAQs</span>
+            <span className="text-[11px] text-gray-600 dark:text-gray-400 font-medium group-hover:text-red-600 transition-colors">FAQs</span>
           </Link>
         </div>
 
