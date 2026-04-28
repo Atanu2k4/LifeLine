@@ -23,6 +23,7 @@ COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/*.js ./
 COPY --from=builder /app/routes ./routes
 COPY --from=builder /app/lib ./lib
+COPY --from=builder /app/sockets ./sockets
 
 # Set environment
 ENV NODE_ENV=production
