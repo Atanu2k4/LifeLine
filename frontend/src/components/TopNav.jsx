@@ -24,8 +24,17 @@ export default function TopNav({ dark, toggleDark }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-12">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-7 h-7 bg-red-600 rounded-lg flex items-center justify-center">
+          <Link 
+            to="/" 
+            onClick={(e) => {
+              if (pathname === '/') {
+                e.preventDefault()
+                window.scrollTo({ top: 0, behavior: 'smooth' })
+              }
+            }}
+            className="flex items-center gap-2 active:scale-95 transition-transform"
+          >
+            <div className="w-7 h-7 bg-red-600 rounded-lg flex items-center justify-center shadow-sm">
               <Shield size={16} className="text-white" />
             </div>
             <span className="font-bold text-base text-gray-900 dark:text-white hidden sm:block">LifeLine+</span>

@@ -317,12 +317,12 @@ export default function Emergency() {
     <div className="pb-6 min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* Header */}
       <div className="bg-red-600 text-white p-4 flex items-center gap-3">
-        <button onClick={() => navigate('/')} className="p-1 hover:bg-white/20 rounded-lg transition-colors">
+        <button onClick={() => navigate('/')} className="p-1 hover:bg-white/20 rounded-lg transition-all active:scale-90">
           <ChevronRight size={24} className="rotate-180" />
         </button>
         <div className="flex-1">
           <h1 className="font-bold text-lg flex items-center gap-2">
-            <Siren size={20} /> Emergency Mode
+            <Siren size={20} className="icon-pop" /> Emergency Mode
           </h1>
           <p className="text-red-100 text-xs">{phase === 'tracking' ? 'Live Tracking Active' : phase === 'civilian_active' ? 'Civilian Mode Active' : 'Request Emergency Assistance'}</p>
         </div>
@@ -389,9 +389,9 @@ export default function Emergency() {
           </h2>
           <div className="space-y-3 max-h-80 overflow-y-auto no-scrollbar">
             {ambulances.map(amb => (
-              <div key={amb.id} className="card flex gap-3 items-center">
+              <div key={amb.id} className="card flex gap-3 items-center card-hover transition-all">
                 <div className="w-12 h-12 bg-red-50 dark:bg-red-900/20 rounded-xl flex items-center justify-center shrink-0">
-                  <Ambulance size={22} className="text-red-600" />
+                  <Ambulance size={22} className="text-red-600 icon-pop" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-sm text-gray-900 dark:text-white">{amb.type} Ambulance</p>
@@ -401,7 +401,7 @@ export default function Emergency() {
                     <span className="text-xs text-gray-500">{amb.distance} km</span>
                   </div>
                 </div>
-                <button onClick={() => bookAmbulance(amb)} className="shrink-0 bg-red-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-red-700 transition-all active:scale-95">
+                <button onClick={() => bookAmbulance(amb)} className="shrink-0 bg-red-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-red-700 transition-all active:scale-95 shadow-sm">
                   Book
                 </button>
               </div>

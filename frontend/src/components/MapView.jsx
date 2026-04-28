@@ -290,8 +290,9 @@ export default function MapView({
         map: mapRef.current,
         title: 'You are here',
         icon: {
-          url: `data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#3b82f6" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>')}`,
-          scaledSize: new window.google.maps.Size(24, 24)
+          url: `data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" fill="#3b82f6" fill-opacity="0.2"/><circle cx="24" cy="24" r="16" fill="#3b82f6" stroke="white" stroke-width="2"/><circle cx="24" cy="20" r="5" fill="white"/><path d="M16 32c0-4 4-7 8-7s8 3 8 7" stroke="white" stroke-width="2" fill="none"/></svg>')}`,
+          scaledSize: new window.google.maps.Size(40, 40),
+          anchor: new window.google.maps.Point(20, 20)
         }
       })
     }
