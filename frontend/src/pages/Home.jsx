@@ -221,7 +221,7 @@ export default function Home() {
             className={`p-4 rounded-2xl text-center transition-colors ${
               serviceType === 'hospital'
                 ? 'bg-gradient-to-br from-red-500 to-red-600 text-white shadow-md'
-                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-100 dark:border-gray-700'
+                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50'
             } ${loading ? 'opacity-60' : ''}`}
           >
             <div className={`w-14 h-14 mx-auto rounded-xl flex items-center justify-center mb-2 overflow-hidden ${
@@ -232,7 +232,8 @@ export default function Home() {
                 <rect x="12" y="20" width="40" height="36" rx="4" fill="#ef4444" opacity="0.2"/>
                 <rect x="20" y="8" width="24" height="20" rx="2" fill="#ef4444"/>
                 <rect x="28" y="12" width="8" height="4" rx="1" fill="white"/>
-                <rect x="30" y="10" width="4" height="8" rx="1" fill="white"/>
+                <rect x="30" y="10" width="4" height="4" rx="1" fill="white"/>
+                <rect x="30" y="16" width="4" height="4" rx="1" fill="white"/>
                 <rect x="16" y="32" width="12" height="12" rx="2" fill="white" opacity="0.9"/>
                 <rect x="36" y="32" width="12" height="12" rx="2" fill="white" opacity="0.9"/>
                 <rect x="16" y="48" width="32" height="8" rx="2" fill="white" opacity="0.9"/>
@@ -250,7 +251,7 @@ export default function Home() {
             className={`p-4 rounded-2xl text-center transition-colors ${
               serviceType === 'police'
                 ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md'
-                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-100 dark:border-gray-700'
+                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50'
             } ${loading ? 'opacity-60' : ''}`}
           >
             <div className={`w-14 h-14 mx-auto rounded-xl flex items-center justify-center mb-2 overflow-hidden ${
@@ -279,7 +280,7 @@ export default function Home() {
             className={`p-4 rounded-2xl text-center transition-colors ${
               serviceType === 'doctor'
                 ? 'bg-gradient-to-br from-amber-500 to-amber-600 text-white shadow-md'
-                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-100 dark:border-gray-700'
+                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50'
             } ${loading ? 'opacity-60' : ''}`}
           >
             <div className={`w-14 h-14 mx-auto rounded-xl flex items-center justify-center mb-2 overflow-hidden ${
@@ -308,7 +309,7 @@ export default function Home() {
             className={`p-4 rounded-2xl text-center transition-colors ${
               serviceType === 'pharmacy'
                 ? 'bg-gradient-to-br from-green-500 to-green-600 text-white shadow-md'
-                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-100 dark:border-gray-700'
+                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50'
             } ${loading ? 'opacity-60' : ''}`}
           >
             <div className={`w-14 h-14 mx-auto rounded-xl flex items-center justify-center mb-2 overflow-hidden ${
@@ -458,7 +459,7 @@ export default function Home() {
                   setMapCenter(service.location)
                 }}
                 className={`card flex gap-4 items-start cursor-pointer transition-colors ${
-                  isSelected ? 'ring-2 ring-red-500 bg-red-50 dark:bg-red-900/10' : ''
+                  isSelected ? 'ring-2 ring-red-500 bg-red-50 dark:bg-red-900/10' : 'hover:bg-gray-50 dark:hover:bg-gray-800/50'
                 }`}
               >
                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${serviceIcons[serviceType].color}`}>
