@@ -45,12 +45,12 @@ export default function Profile() {
   const initials = user.name?.charAt(0)?.toUpperCase() || 'U'
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-24" style={{ fontFamily: "'Inter', sans-serif" }}>
+    <div className="min-h-screen bg-gray-50 pb-24">
       <div className="max-w-xl mx-auto px-4 py-8">
 
         {/* Header */}
         <div className="mb-6">
-          <p className="text-xs font-medium text-[#C8102E] mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>ACCOUNT</p>
+          <p className="text-xs font-medium text-[#C8102E] mb-1">ACCOUNT</p>
           <h1 className="text-2xl font-extrabold text-gray-900">Profile</h1>
         </div>
 
@@ -82,7 +82,7 @@ export default function Profile() {
           {editing && (
             <div className="mt-4 pt-4 border-t border-gray-100 space-y-3">
               <div>
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1.5" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Name</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1.5">Name</label>
                 <input
                   className="input-field text-sm"
                   value={form.name}
@@ -91,7 +91,7 @@ export default function Profile() {
                 />
               </div>
               <div>
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1.5" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Phone</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1.5">Phone</label>
                 <input
                   className="input-field text-sm"
                   value={form.phone}
@@ -170,7 +170,7 @@ export default function Profile() {
           Sign Out
         </button>
 
-        <p className="text-center text-[11px] text-gray-300 mt-6" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+        <p className="text-center text-[11px] text-gray-300 mt-6">
           LifeLine+ · v1.0.0
         </p>
       </div>
