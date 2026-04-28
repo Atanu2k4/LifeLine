@@ -17,8 +17,9 @@ router.post('/google', async (req, res) => {
     let userData = null;
     let googleId = null;
 
+    // Attempt 1: Verify as Google ID Token (Firebase or Direct ID Token)
     try {
-      console.log('🔐 [Auth] Attempting Pure Google verification...');
+      console.log('🔐 [Auth] Attempting ID Token verification...');
       const ticket = await client.verifyIdToken({
         idToken,
         audience: process.env.GOOGLE_CLIENT_ID,
@@ -30,20 +31,42 @@ router.post('/google', async (req, res) => {
         email: payload.email,
         name: payload.name,
         photoURL: payload.picture,
-        provider: 'google_pure'
+        provider: 'google_id'
       };
-    } catch (googleError) {
-      console.log('🔄 [Auth] Pure Google failed, trying Firebase fallback...');
-      const auth = getFirebaseAdmin().auth();
-      const decodedToken = await auth.verifyIdToken(idToken);
-      googleId = decodedToken.uid;
-      userData = {
-        id: googleId,
-        email: decodedToken.email,
-        name: decodedToken.name,
-        photoURL: decodedToken.picture,
-        provider: 'firebase_google'
-      };
+    } catch (idTokenError) {
+      // Attempt 2: Verify as Google Access Token (Direct Fallback)
+      console.log('🔄 [Auth] ID Token failed, attempting Access Token verification...');
+      try {
+        const response = await fetch(`https://oauth2.googleapis.com/tokeninfo?access_token=${idToken}`);
+        if (!response.ok) throw new Error('Invalid Access Token');
+        
+        const payload = await response.json();
+        googleId = payload.sub;
+        
+        // Access token doesn't always have name/picture, so we fetch them if missing
+        if (!payload.email) throw new Error('Token does not contain email');
+        
+        userData = {
+          id: googleId,
+          email: payload.email,
+          name: payload.name || payload.email.split('@')[0],
+          photoURL: payload.picture || '',
+          provider: 'google_access'
+        };
+      } catch (accessTokenError) {
+        // Attempt 3: Fallback to Firebase ID Token Verification
+        console.log('🔄 [Auth] Access Token failed, trying Firebase fallback...');
+        const auth = getFirebaseAdmin().auth();
+        const decodedToken = await auth.verifyIdToken(idToken);
+        googleId = decodedToken.uid;
+        userData = {
+          id: googleId,
+          email: decodedToken.email,
+          name: decodedToken.name,
+          photoURL: decodedToken.picture,
+          provider: 'firebase_google'
+        };
+      }
     }
 
     const dbUser = await getDocument('users', googleId);
