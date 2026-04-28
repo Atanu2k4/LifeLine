@@ -20,13 +20,20 @@ import NotFound from './pages/NotFound.jsx'
 function App() {
   const { initAuth } = useAuth()
   const [initialLoading, setInitialLoading] = useState(true)
+  const [fadeOut, setFadeOut] = useState(false)
+  const [showContent, setShowContent] = useState(false)
 
   useEffect(() => {
     const authCleanup = initAuth()
     
-    // Simulate initial loading for 2 seconds for smooth transition
+    // Simulate initial loading for 2 seconds, then fade out
     const timer = setTimeout(() => {
-      setInitialLoading(false)
+      setFadeOut(true)
+      // Wait for fade out animation, then show content with fade in
+      setTimeout(() => {
+        setInitialLoading(false)
+        setShowContent(true)
+      }, 500)
     }, 2000)
 
     return () => {
@@ -36,27 +43,33 @@ function App() {
   }, [initAuth])
 
   if (initialLoading) {
-    return <Loader fullScreen text="Initializing LifeLine+ Emergency Services..." />
+    return (
+      <div className={`transition-opacity duration-500 ${fadeOut ? 'opacity-0' : 'opacity-100'}`}>
+        <Loader fullScreen text="Initializing LifeLine+ Emergency Services..." />
+      </div>
+    )
   }
 
   return (
-    <Routes>
-      <Route element={<Layout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/emergency" element={<Emergency />} />
-        <Route path="/doctors" element={<Doctors />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/faqs" element={<FAQs />} />
-        <Route path="/privacy" element={<PrivacyPolicy />} />
-        <Route path="/terms" element={<TermsOfService />} />
-        <Route path="/docs" element={<Documentation />} />
-        <Route path="*" element={<NotFound />} />
-      </Route>
-    </Routes>
+    <div className={`transition-opacity duration-700 ${showContent ? 'opacity-100' : 'opacity-0'}`}>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/emergency" element={<Emergency />} />
+          <Route path="/doctors" element={<Doctors />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/faqs" element={<FAQs />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<TermsOfService />} />
+          <Route path="/docs" element={<Documentation />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
+    </div>
   )
 }
 
