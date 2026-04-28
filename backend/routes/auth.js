@@ -1,6 +1,6 @@
 import express from 'express';
 import { OAuth2Client } from 'google-auth-library';
-import { getFirebaseAdmin, saveDocument, getDocument, incrementSigninCount } from '../lib/firebaseAdmin.js';
+import { getFirebaseAdmin, saveDocument, getDocument, getUserByEmail, incrementSigninCount } from '../lib/firebaseAdmin.js';
 
 const router = express.Router();
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
@@ -17,7 +17,6 @@ router.post('/google', async (req, res) => {
     let userData = null;
     let googleId = null;
 
-    // Attempt 1: Verify as Pure Google OAuth Token
     try {
       console.log('🔐 [Auth] Attempting Pure Google verification...');
       const ticket = await client.verifyIdToken({
@@ -34,7 +33,6 @@ router.post('/google', async (req, res) => {
         provider: 'google_pure'
       };
     } catch (googleError) {
-      // Attempt 2: Fallback to Firebase Token Verification
       console.log('🔄 [Auth] Pure Google failed, trying Firebase fallback...');
       const auth = getFirebaseAdmin().auth();
       const decodedToken = await auth.verifyIdToken(idToken);
@@ -48,7 +46,6 @@ router.post('/google', async (req, res) => {
       };
     }
 
-    // Process user in Firestore
     const dbUser = await getDocument('users', googleId);
     userData.updatedAt = new Date().toISOString();
 
@@ -73,44 +70,47 @@ router.post('/google', async (req, res) => {
   }
 });
 
-// Legacy Sign Up (Email/Password)
-router.post('/signup', async (req, res) => {
+// Check if user exists by email
+router.post('/check-email', async (req, res) => {
   try {
-    const { id, name, email, phone, photo, provider, createdAt } = req.body;
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ error: 'Email is required' });
 
-    if (!id || !email) {
-      return res.status(400).json({ error: 'Missing required fields' });
+    const user = await getUserByEmail(email);
+    if (!user) {
+      return res.status(200).json({ success: false, exists: false });
     }
 
-    const userData = {
-      id,
-      name: name || 'User',
-      email,
-      phone: phone || '',
-      photo: photo || '',
-      provider: provider || 'email',
-      createdAt: createdAt || new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      status: 'active'
-    };
-
-    await saveDocument('users', id, userData);
-    res.status(200).json({ success: true, user: userData });
+    res.status(200).json({ success: true, exists: true, user });
   } catch (error) {
-    console.error('❌ Signup error:', error);
-    res.status(500).json({ error: 'Failed to save user data' });
+    res.status(500).json({ error: 'Failed to check user' });
   }
 });
 
-// Get user data
-router.get('/user/:userId', async (req, res) => {
+// Sign in/up user (Legacy/Email)
+router.post('/signin', async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await getUserByEmail(email);
+    if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+
+    await incrementSigninCount(user.id);
+    const updatedUser = await getDocument('users', user.id);
+    res.status(200).json({ success: true, user: updatedUser });
+  } catch (error) {
+    res.status(500).json({ error: 'Sign-in failed' });
+  }
+});
+
+// Update Profile
+router.put('/profile/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
-    const user = await getDocument('users', userId);
-    if (!user) return res.status(404).json({ success: false, message: 'User not found' });
-    res.status(200).json({ success: true, user });
+    const updates = req.body;
+    await saveDocument('users', userId, { ...updates, updatedAt: new Date().toISOString() });
+    res.status(200).json({ success: true });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to retrieve user data' });
+    res.status(500).json({ error: 'Update failed' });
   }
 });
 
