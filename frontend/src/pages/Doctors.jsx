@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useAuth } from '../context/AuthContext.jsx'
 import { useGeolocation } from '../hooks/useGeolocation.js'
 import LoginModal from '../components/LoginModal.jsx'
@@ -166,7 +166,11 @@ export default function Doctors() {
               </span>
             )}
             <button 
-              onClick={refreshLocation}
+              onClick={() => {
+                stableLocationRef.current = null
+                hasFetchedRef.current = false
+                refreshLocation()
+              }}
               className="p-1 hover:bg-gray-200 rounded transition-colors"
               title="Refresh location"
             >
