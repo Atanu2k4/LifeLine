@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import { signInWithPopup, signOut } from 'firebase/auth'
+import { useGoogleLogin } from '@react-oauth/google'
 import { useAuth } from '../context/AuthContext.jsx'
 import { auth, firebaseEnabled, googleProvider } from '../lib/firebase.js'
 import { X, Mail, User as UserIcon, ChevronRight, AlertCircle, WifiOff } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 export default function LoginModal({ onClose }) {
-  const { login } = useAuth()
+  const { login, verifyGoogleToken } = useAuth()
   const [mode, setMode] = useState('form')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -14,6 +15,66 @@ export default function LoginModal({ onClose }) {
   const [error, setError] = useState('')
   const [userNotFound, setUserNotFound] = useState(false)
   const [backendUnavailable, setBackendUnavailable] = useState(false)
+
+  // Pure Google OAuth Fallback
+  const { login: triggerGoogleFallback } = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        setLoading(true)
+        console.log('🔄 [Auth Fallback] Google OAuth Success, verifying token...')
+        
+        // Use the access token to verify with our backend
+        // Our backend dual-verification handles both Firebase ID tokens and Google Access/ID tokens
+        await verifyGoogleToken(tokenResponse.access_token, 'google_pure')
+        onClose()
+      } catch (err) {
+        console.error('❌ [Auth Fallback] Verification failed:', err)
+        setError('Fallback authentication failed. Please check your connection.')
+        setLoading(false)
+        setMode('form')
+      }
+    },
+    onError: () => {
+      console.error('❌ [Auth Fallback] Google Login Failed')
+      setError('Google Login failed. Please try again.')
+      setLoading(false)
+      setMode('form')
+    }
+  })
+
+  const googleLogin = async () => {
+    setMode('google')
+    setLoading(true)
+    setError('')
+    setBackendUnavailable(false)
+
+    // Strategy 1: Try Firebase first
+    try {
+      console.log('🔐 [Auth] Attempting Firebase Google Login...')
+      if (!firebaseEnabled || !auth || !googleProvider) {
+        throw new Error('Firebase not configured')
+      }
+
+      const result = await signInWithPopup(auth, googleProvider)
+      const idToken = await result.user.getIdToken()
+      
+      await verifyGoogleToken(idToken, 'firebase')
+      setLoading(false)
+      onClose()
+    } catch (err) {
+      console.warn('⚠️ [Auth] Firebase failed, triggering Pure Google fallback...', err.message)
+      
+      // Strategy 2: Fallback to Pure Google OAuth
+      try {
+        triggerGoogleFallback()
+      } catch (fallbackErr) {
+        console.error('❌ [Auth] All login methods failed')
+        setError('Authentication failed. Please use email signin.')
+        setLoading(false)
+        setMode('form')
+      }
+    }
+  }
 
   const submitForm = async (e) => {
     e.preventDefault()
@@ -25,206 +86,57 @@ export default function LoginModal({ onClose }) {
     
     try {
       const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'
-      
-      console.log('🔐 [Email Sign-in] Checking if user exists...')
-      console.log(`📧 Email: ${email}`)
-      
-      // Check if user exists
       const checkResponse = await fetch(`${backendUrl}/api/auth/check-email`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
       })
       
-      // Handle 404 - backend API not found
       if (checkResponse.status === 404) {
-        console.log('⚠️ Backend API not found, switching to demo mode')
         setBackendUnavailable(true)
         setLoading(false)
         return
       }
       
       const checkData = await checkResponse.json()
-      
       if (!checkData.exists) {
-        console.log('❌ User does not exist, must sign up first')
         setError('Account not found. Please create an account first.')
         setUserNotFound(true)
         setLoading(false)
         return
       }
       
-      console.log('✅ User exists, processing sign-in...')
-      
-      // Sign in the user
       const signinResponse = await fetch(`${backendUrl}/api/auth/signin`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
       })
       
-      if (signinResponse.status === 404) {
-        setBackendUnavailable(true)
-        setLoading(false)
-        return
-      }
-      
       const signinData = await signinResponse.json()
-      
       if (!signinData.success) {
         setError(signinData.message || 'Sign-in failed')
         setLoading(false)
         return
       }
       
-      console.log('✅ Sign-in successful, signin count:', signinData.user.signinCount)
-      
-      // Login to app
-      login({
-        id: signinData.user.id,
-        name: signinData.user.name || name,
-        email: signinData.user.email,
-        phone: signinData.user.phone,
-        address: signinData.user.address,
-        provider: 'email',
-        photoURL: signinData.user.photoURL,
-        createdAt: signinData.user.createdAt
-      })
-      
+      login(signinData.user)
       setLoading(false)
       onClose()
     } catch (error) {
-      console.error('❌ Sign-in error:', error)
       setError(error.message || 'Sign-in failed. Please try again.')
       setLoading(false)
     }
   }
 
-  // Demo mode login when backend is unavailable
   const loginWithDemoMode = () => {
     const demoUser = {
       id: `demo-${Date.now()}`,
       name: name || 'Demo User',
       email: email || 'demo@lifelineplus.in',
-      phone: '',
-      address: '',
-      provider: 'demo',
-      photoURL: '',
-      createdAt: new Date().toISOString()
+      provider: 'demo'
     }
-    
-    // Store in localStorage for persistence
-    localStorage.setItem('lifeline_demo_user', JSON.stringify(demoUser))
-    
-    console.log('✅ Demo mode login:', demoUser)
     login(demoUser)
-    setLoading(false)
     onClose()
-  }
-
-  const googleLogin = async () => {
-    setMode('google')
-    setLoading(true)
-    setError('')
-    setBackendUnavailable(false)
-
-    if (!firebaseEnabled || !auth || !googleProvider) {
-      setLoading(false)
-      setMode('form')
-      setError('Firebase Google login is not configured. Use email signin instead.')
-      return
-    }
-
-    try {
-      const result = await signInWithPopup(auth, googleProvider)
-      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'
-      
-      console.log('🔐 [Google Sign-in] User authenticated with Google')
-      console.log(`📧 Email: ${result.user.email}`)
-      
-      // Check if user exists
-      console.log('🔍 Checking if user exists in database...')
-      const checkResponse = await fetch(`${backendUrl}/api/auth/check-email`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: result.user.email })
-      })
-      
-      // Handle 404 - backend API not found
-      if (checkResponse.status === 404) {
-        console.log('⚠️ Backend API not found, switching to demo mode')
-        setBackendUnavailable(true)
-        setMode('form')
-        await signOut(auth).catch(() => {})
-        setLoading(false)
-        return
-      }
-      
-      const checkData = await checkResponse.json()
-      
-      if (!checkData.exists) {
-        console.log('❌ Google user does not exist, must sign up first')
-        setError('Account not found. Please create an account first using your Google email.')
-        setUserNotFound(true)
-        setMode('form')
-        await signOut(auth).catch(() => {})
-        setLoading(false)
-        return
-      }
-      
-      console.log('✅ User exists, processing sign-in...')
-      
-      // Sign in the user
-      const signinResponse = await fetch(`${backendUrl}/api/auth/signin`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: result.user.email })
-      })
-      
-      if (signinResponse.status === 404) {
-        setBackendUnavailable(true)
-        setMode('form')
-        await signOut(auth).catch(() => {})
-        setLoading(false)
-        return
-      }
-      
-      const signinData = await signinResponse.json()
-      
-      if (!signinData.success) {
-        setError(signinData.message || 'Sign-in failed')
-        setMode('form')
-        await signOut(auth).catch(() => {})
-        setLoading(false)
-        return
-      }
-      
-      console.log('✅ Google sign-in successful, signin count:', signinData.user.signinCount)
-      
-      login({
-        id: signinData.user.id || result.user.uid,
-        name: signinData.user.name || result.user.displayName,
-        email: signinData.user.email,
-        phone: signinData.user.phone || '',
-        address: signinData.user.address || '',
-        photoURL: signinData.user.photoURL || result.user.photoURL,
-        provider: 'google',
-        createdAt: signinData.user.createdAt,
-        signinCount: signinData.user.signinCount,
-        lastSigninAt: signinData.user.lastSigninAt,
-        status: signinData.user.status
-      })
-
-      await signOut(auth).catch(() => {})
-      
-      setLoading(false)
-      onClose()
-    } catch (err) {
-      console.error('❌ Google sign-in error:', err)
-      setError(err?.message || 'Google sign-in failed.')
-      setMode('form')
-      setLoading(false)
-    }
   }
 
   return (
@@ -243,52 +155,22 @@ export default function LoginModal({ onClose }) {
         {mode === 'google' ? (
           <div className="text-center py-8">
             <div className="w-12 h-12 border-4 border-red-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-gray-600 dark:text-gray-300">Connecting to Google...</p>
+            <p className="text-gray-600">Connecting to Google...</p>
           </div>
         ) : (
           <>
             {error && (
-              <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 flex items-start gap-3 dark:border-red-900/60 dark:bg-red-900/20">
-                <AlertCircle size={18} className="text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
+              <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 flex items-start gap-3">
+                <AlertCircle size={18} className="text-red-600 mt-0.5" />
                 <div className="flex-1">
-                  <p className="text-sm text-red-700 dark:text-red-300">{error}</p>
-                  {userNotFound && (
-                    <Link
-                      to="/signup"
-                      onClick={onClose}
-                      className="inline-block mt-2 text-sm font-medium text-red-700 dark:text-red-300 hover:text-red-800 dark:hover:text-red-200 underline"
-                    >
-                      Go to Sign Up →
-                    </Link>
-                  )}
+                  <p className="text-sm text-red-700">{error}</p>
                 </div>
-              </div>
-            )}
-
-            {backendUnavailable && (
-              <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-4">
-                <div className="flex items-start gap-3 mb-3">
-                  <WifiOff size={18} className="text-amber-600 flex-shrink-0 mt-0.5" />
-                  <div className="flex-1">
-                    <p className="text-sm font-semibold text-amber-800">Backend server unavailable</p>
-                    <p className="text-xs text-amber-700 mt-1">
-                      The authentication API is not reachable. You can use Demo Mode to explore the app.
-                    </p>
-                  </div>
-                </div>
-                <button
-                  onClick={loginWithDemoMode}
-                  disabled={loading}
-                  className="w-full bg-amber-100 hover:bg-amber-200 text-amber-800 font-semibold py-2.5 rounded-lg transition-all active:scale-95 text-sm"
-                >
-                  {loading ? 'Loading...' : 'Continue in Demo Mode'}
-                </button>
               </div>
             )}
 
             <button
               onClick={googleLogin}
-              className="w-full flex items-center justify-center gap-3 bg-white border border-gray-200 text-gray-700 py-3 rounded-xl font-medium hover:bg-gray-50 transition-all active:scale-95 mb-4"
+              className="w-full flex items-center justify-center gap-3 bg-white border border-gray-200 text-gray-700 py-3 rounded-xl font-medium hover:bg-gray-50 transition-all active:scale-95 mb-4 shadow-sm"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -299,57 +181,36 @@ export default function LoginModal({ onClose }) {
               Continue with Google
             </button>
 
-            <div className="flex items-center gap-3 my-4">
-              <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700" />
-              <span className="text-[10px] text-gray-400 uppercase">
-                or continue with email
-              </span>
-              <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700" />
+            <div className="flex items-center gap-3 my-4 text-gray-400">
+              <div className="flex-1 h-px bg-gray-100" />
+              <span className="text-[10px] uppercase tracking-wider">or continue with email</span>
+              <div className="flex-1 h-px bg-gray-100" />
             </div>
 
             <form onSubmit={submitForm} className="space-y-3">
-              <div className="relative">
-                <UserIcon size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Full Name"
-                  value={name}
-                  onChange={e => setName(e.target.value)}
-                  className="input-field pl-10"
-                  required
-                />
-              </div>
-              <div className="relative">
-                <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input
-                  type="email"
-                  placeholder="Email Address"
-                  value={email}
-                  onChange={e => {
-                    setEmail(e.target.value)
-                    setError('')
-                    setUserNotFound(false)
-                  }}
-                  className="input-field pl-10"
-                  required
-                />
-              </div>
+              <input
+                type="text"
+                placeholder="Full Name"
+                value={name}
+                onChange={e => setName(e.target.value)}
+                className="input-field"
+                required
+              />
+              <input
+                type="email"
+                placeholder="Email Address"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                className="input-field"
+                required
+              />
               <button
                 type="submit"
                 disabled={loading}
-                className="btn-primary w-full"
+                className="btn-primary w-full shadow-lg shadow-red-500/20"
               >
-                {loading ? 'Signing in...' : 'Continue as Guest'}
+                {loading ? 'Processing...' : 'Continue as Guest'}
               </button>
-
-              <Link
-                to="/signup"
-                onClick={onClose}
-                className="w-full flex items-center justify-center gap-2 bg-primary-100 hover:bg-primary-200 dark:bg-primary-900/20 dark:hover:bg-primary-900/30 text-primary-700 dark:text-primary-300 font-medium py-2.5 px-4 rounded-xl transition-all active:scale-95"
-              >
-                Create Account
-                <ChevronRight size={18} />
-              </Link>
             </form>
           </>
         )}
