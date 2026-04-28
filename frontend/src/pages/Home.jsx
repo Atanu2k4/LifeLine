@@ -507,6 +507,86 @@ export default function Home() {
         </div>
       </div>
 
+      {selectedService && (
+        <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-white dark:bg-gray-900 w-full max-w-lg rounded-t-3xl sm:rounded-3xl overflow-hidden shadow-2xl animate-in slide-in-from-bottom duration-300">
+            {/* Header Image/Icon */}
+            <div className={`h-32 flex items-center justify-center ${serviceIcons[serviceType].color}`}>
+              <div className="relative">
+                <Siren size={48} className="text-red-500" />
+                <div className="absolute -top-2 -right-2 bg-amber-500 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-sm animate-pulse">
+                  DEMO MODE
+                </div>
+              </div>
+            </div>
+
+            <div className="p-6">
+              <div className="flex justify-between items-start mb-4">
+                <div className="min-w-0 flex-1">
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white truncate">{selectedService.name}</h2>
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className="flex items-center gap-1 text-sm text-amber-600 font-bold">
+                      <Star size={14} fill="currentColor" />
+                      {selectedService.rating || '4.5'}
+                    </span>
+                    <span className="text-gray-300">•</span>
+                    <span className="text-sm text-gray-500 font-medium uppercase">{serviceType}</span>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => setSelectedService(null)}
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors ml-4"
+                >
+                  <Navigation className="rotate-45 text-gray-400" size={20} />
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <MapPin className="text-red-500 mt-1 shrink-0" size={18} />
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{selectedService.address || 'Address information not available'}</p>
+                </div>
+                
+                <div className="flex items-center gap-3">
+                  <Phone className="text-green-500 shrink-0" size={18} />
+                  <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">{selectedService.phone || '999-000-DEMO'}</p>
+                </div>
+
+                <div className="bg-amber-50 dark:bg-amber-900/10 border border-amber-100 dark:border-amber-900/30 p-3 rounded-xl">
+                  <p className="text-xs text-amber-700 dark:text-amber-400 flex items-center gap-2">
+                    <Shield size={14} className="shrink-0" />
+                    <span><strong>Simulation Mode:</strong> No real emergency services will be dispatched during this demo session.</span>
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 mt-8">
+                <button 
+                  onClick={() => {
+                    alert('Simulation: Routing to ' + selectedService.name)
+                    setSelectedService(null)
+                  }}
+                  className="py-3 px-4 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white font-bold rounded-xl hover:bg-gray-200 transition-all flex items-center justify-center gap-2"
+                >
+                  <Navigation size={18} />
+                  Directions
+                </button>
+                <button 
+                  onClick={() => {
+                    alert('Simulation: Requesting service from ' + selectedService.name)
+                    setSelectedService(null)
+                  }}
+                  className="py-3 px-4 bg-red-600 text-white font-bold rounded-xl shadow-lg shadow-red-200 dark:shadow-none hover:bg-red-700 transition-all flex items-center justify-center gap-2"
+                >
+                  <Ambulance size={18} />
+                  Book Demo
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
     </div>
   )
