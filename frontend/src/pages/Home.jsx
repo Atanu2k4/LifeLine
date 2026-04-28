@@ -48,11 +48,18 @@ export default function Home() {
     )
   }, [])
 
-  const demoServices = useCallback(() => {
+  const serviceIcons = {
+    hospital: { icon: Siren, label: 'Hospitals', color: 'text-red-500 bg-red-50 dark:bg-red-900/20', hex: '#ef4444' },
+    police: { icon: Shield, label: 'Police', color: 'text-blue-500 bg-blue-50 dark:bg-blue-900/20', hex: '#3b82f6' },
+    doctor: { icon: Stethoscope, label: 'Doctors', color: 'text-amber-500 bg-amber-50 dark:bg-amber-900/20', hex: '#f59e0b' },
+    pharmacy: { icon: MapPin, label: 'Pharmacy', color: 'text-green-500 bg-green-50 dark:bg-green-900/20', hex: '#22c55e' }
+  }
+
+  const demoServices = useCallback((type = serviceType) => {
     const baseLat = location?.lat || 22.5726
     const baseLng = location?.lng || 88.3639
     
-    const generateDemo = (type, count) => {
+    const generateDemo = (t, count) => {
       const config = {
         hospital: { prefix: 'Nearby', suffix: 'Hospital', names: ['City', 'General', 'Emergency', 'Metro'] },
         police: { prefix: 'Local', suffix: 'Police Station', names: ['Sector 5', 'Bidhannagar', 'Park Street', 'Central'] },
@@ -60,19 +67,20 @@ export default function Home() {
         pharmacy: { prefix: 'Quick', suffix: 'Pharmacy', names: ['MedPlus', 'Apollo', 'Frank Ross', 'Wellness'] }
       }
       
-      const c = config[type]
+      const c = config[t]
       return Array.from({ length: count }).map((_, i) => ({
-        id: `${type}-${i}`,
+        id: `${t}-${i}`,
         name: `${c.prefix} ${c.names[i % c.names.length]} ${c.suffix}`,
         address: `Street ${i + 1}, Near current location`,
         rating: (4 + Math.random()).toFixed(1),
         distance: 0.5 + (i * 0.4),
         openNow: true,
-        phone: type === 'police' ? '100' : `+91 98300 1234${i}`,
+        phone: t === 'police' ? '100' : `+91 98300 1234${i}`,
         location: {
           lat: baseLat + (Math.random() - 0.5) * 0.02,
           lng: baseLng + (Math.random() - 0.5) * 0.02
-        }
+        },
+        type: t
       }))
     }
 
@@ -83,10 +91,10 @@ export default function Home() {
       pharmacy: generateDemo('pharmacy', 10)
     }
     
-    return demoData[serviceType] || []
+    return demoData[type] || []
   }, [location, serviceType])
 
-  const fetchServices = useCallback(async () => {
+  const fetchServices = useCallback(async (type = serviceType) => {
     if (!location) return
     setLoading(true)
     setError('')
@@ -94,24 +102,24 @@ export default function Home() {
       const params = new URLSearchParams({
         lat: String(location.lat),
         lng: String(location.lng),
-        type: serviceType,
+        type,
         radius: filters.radius,
         sortBy: filters.openNow ? 'availability' : 'distance'
       })
       if (filters.minRating) params.set('minRating', filters.minRating)
       if (filters.openNow) params.set('openNow', 'true')
-      if (serviceType === 'doctor' && filters.specialty) params.set('specialty', filters.specialty)
+      if (type === 'doctor' && filters.specialty) params.set('specialty', filters.specialty)
 
       const res = await fetch(`${BACKEND_URL}/api/nearest-services?${params.toString()}`)
       const data = await res.json()
       
       if (data.results && data.results.length > 0) {
-        setServices(data.results)
+        setServices(data.results.map(s => ({ ...s, type })))
       } else {
-        setServices(demoServices())
+        setServices(demoServices(type))
       }
     } catch (err) {
-      setServices(demoServices())
+      setServices(demoServices(type))
     } finally {
       setLoading(false)
     }
@@ -126,13 +134,6 @@ export default function Home() {
     else navigate('/emergency')
   }
 
-  const serviceIcons = {
-    hospital: { icon: Siren, label: 'Hospitals', color: 'text-red-500 bg-red-50 dark:bg-red-900/20', hex: '#ef4444' },
-    police: { icon: Shield, label: 'Police', color: 'text-blue-500 bg-blue-50 dark:bg-blue-900/20', hex: '#3b82f6' },
-    doctor: { icon: Stethoscope, label: 'Doctors', color: 'text-amber-500 bg-amber-50 dark:bg-amber-900/20', hex: '#f59e0b' },
-    pharmacy: { icon: MapPin, label: 'Pharmacy', color: 'text-green-500 bg-green-50 dark:bg-green-900/20', hex: '#22c55e' }
-  }
-
   const markers = services.slice(0, 10).filter(s => s.location).map(s => ({
     position: s.location,
     title: s.name,
@@ -143,11 +144,11 @@ export default function Home() {
   const handleServiceTypeChange = (key) => {
     setServiceType(key)
     setSelectedService(null)
-    setRoutes([]) // Clear previous routes
+    setRoutes([]) 
     setActiveRoute(null)
-    // Immediately trigger search when button is clicked
+    // Pass key directly to bypass state lag
     if (location) {
-      setTimeout(() => fetchServices(), 100)
+      fetchServices(key)
     }
   }
 
