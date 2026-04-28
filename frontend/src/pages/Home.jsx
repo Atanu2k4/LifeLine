@@ -235,7 +235,7 @@ export default function Home() {
               </svg>
             </div>
             <span className="text-sm font-semibold">Hospitals</span>
-            <span className="block text-[10px] opacity-80 mt-0.5">{services.filter(s => s.name?.toLowerCase().includes('hospital')).length || 8} nearby</span>
+            <span className="block text-[10px] opacity-80 mt-0.5">{serviceType === 'hospital' ? (services.length || 10) : 10} nearby</span>
           </button>
 
           <button
@@ -264,7 +264,7 @@ export default function Home() {
               </svg>
             </div>
             <span className="text-sm font-semibold">Police</span>
-            <span className="block text-[10px] opacity-80 mt-0.5">{services.filter(s => s.name?.toLowerCase().includes('police')).length || 8} nearby</span>
+            <span className="block text-[10px] opacity-80 mt-0.5">{serviceType === 'police' ? (services.length || 5) : 5} nearby</span>
           </button>
 
           <button
@@ -293,7 +293,7 @@ export default function Home() {
               </svg>
             </div>
             <span className="text-sm font-semibold">Doctors</span>
-            <span className="block text-[10px] opacity-80 mt-0.5">{services.filter(s => s.name?.toLowerCase().includes('dr.')).length || 8} nearby</span>
+            <span className="block text-[10px] opacity-80 mt-0.5">{serviceType === 'doctor' ? (services.length || 12) : 12} nearby</span>
           </button>
 
           <button
@@ -324,7 +324,7 @@ export default function Home() {
               </svg>
             </div>
             <span className="text-sm font-semibold">Pharmacy</span>
-            <span className="block text-[10px] opacity-80 mt-0.5">{services.filter(s => s.name?.toLowerCase().includes('pharmacy')).length || 8} nearby</span>
+            <span className="block text-[10px] opacity-80 mt-0.5">{serviceType === 'pharmacy' ? (services.length || 15) : 15} nearby</span>
           </button>
         </div>
         
