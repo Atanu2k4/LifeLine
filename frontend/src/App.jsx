@@ -1,7 +1,8 @@
 import { Routes, Route } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuth } from './context/AuthContext.jsx'
 import Layout from './components/Layout.jsx'
+import Loader from './components/Loader.jsx'
 import Home from './pages/Home.jsx'
 import Emergency from './pages/Emergency.jsx'
 import Doctors from './pages/Doctors.jsx'
@@ -17,10 +18,25 @@ import NotFound from './pages/NotFound.jsx'
 
 function App() {
   const { initAuth } = useAuth()
+  const [initialLoading, setInitialLoading] = useState(true)
 
   useEffect(() => {
-    return initAuth()
+    const authCleanup = initAuth()
+    
+    // Simulate initial loading for 2 seconds for smooth transition
+    const timer = setTimeout(() => {
+      setInitialLoading(false)
+    }, 2000)
+
+    return () => {
+      authCleanup()
+      clearTimeout(timer)
+    }
   }, [initAuth])
+
+  if (initialLoading) {
+    return <Loader fullScreen text="Initializing LifeLine+ Emergency Services..." />
+  }
 
   return (
     <Routes>
