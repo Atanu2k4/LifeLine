@@ -389,7 +389,7 @@ export default function Emergency() {
   if (!user) return showLogin ? <LoginModal onClose={() => navigate('/')} /> : null
 
   return (
-    <div className="min-h-screen bg-gray-50" style={{ fontFamily: "'Inter', sans-serif" }}>
+    <div className="min-h-screen bg-gray-50">
 
       {/* ── Header ─────────────────────────────────────────────────────── */}
       <div className="bg-white border-b border-gray-100 flex items-center gap-3 px-4 py-3.5 sticky top-0 z-10 shadow-sm">
@@ -397,7 +397,7 @@ export default function Emergency() {
           <ChevronLeft size={20} />
         </button>
         <div className="flex-1 min-w-0">
-          <p className="text-[10px] font-bold text-[#C8102E] tracking-widest uppercase mb-0.5 truncate" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+          <p className="text-[10px] font-bold text-[#C8102E] tracking-widest uppercase mb-0.5 truncate">
              {phase === 'tracking' ? 'Live Tracking' : phase === 'civilian_active' ? 'Civilian Mode' : 'Emergency Assistance'}
           </p>
           <h1 className="font-bold text-lg text-gray-900 flex items-center gap-1.5 leading-none truncate">
@@ -408,7 +408,7 @@ export default function Emergency() {
         <div className="flex items-center gap-2.5 shrink-0">
            {locationAccuracy && (
             <div className="text-right border-r border-gray-100 pr-2.5 hidden sm:block">
-              <p className="text-[9px] font-semibold text-gray-400 uppercase tracking-widest" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Accuracy</p>
+              <p className="text-[9px] font-semibold text-gray-400 uppercase tracking-widest">Accuracy</p>
               <p className="text-xs font-bold text-gray-900">±{locationAccuracy}m</p>
             </div>
           )}
@@ -595,7 +595,7 @@ export default function Emergency() {
                 <Building2 size={18} className="text-white" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-[10px] font-bold text-[#C8102E] tracking-widest uppercase mb-0.5" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Destination Hospital</p>
+                <p className="text-[10px] font-bold text-[#C8102E] tracking-widest uppercase mb-0.5">Destination Hospital</p>
                 <p className="text-sm font-bold text-gray-900 leading-tight">{nearestHospital.name}</p>
                 <div className="flex items-center gap-2 mt-1">
                    <Clock size={11} className="text-[#C8102E]" />
@@ -741,7 +741,7 @@ export default function Emergency() {
               { key: 'contact', label: 'Contact Number', ph: '+91 ...' },
             ].map(f => (
               <div key={f.key}>
-                <label className="text-[10px] font-bold text-gray-400 uppercase block mb-1.5" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{f.label}</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block mb-1.5">{f.label}</label>
                 <input className="input-field text-sm" placeholder={f.ph} value={civilianForm[f.key]} onChange={e => setCivilianForm(p => ({ ...p, [f.key]: e.target.value }))} />
               </div>
             ))}
@@ -765,7 +765,7 @@ export default function Emergency() {
               <Shield size={22} className="text-amber-600" />
               <div>
                 <h2 className="font-bold text-gray-900">Civilian Mode Active</h2>
-                <p className="text-xs text-amber-700" style={{ fontFamily: "'JetBrains Mono', monospace" }}>ID: {civilianResult.tempVehicleId}</p>
+                <p className="text-xs text-amber-700">ID: {civilianResult.tempVehicleId}</p>
               </div>
             </div>
             <div className="space-y-2">
