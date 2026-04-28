@@ -115,21 +115,21 @@ export default function Home() {
           {/* Left — text */}
           <div className="order-2 lg:order-1 flex flex-col items-start">
             {/* Eyebrow */}
-            <div className="inline-flex items-center gap-2 bg-red-50 border border-red-100 rounded-full px-4 py-1.5 mb-6">
+            <div className="inline-flex items-center gap-2 bg-red-50 border border-red-100 rounded-full px-4 py-1.5 mb-10 mt-4">
               <span className="w-2 h-2 rounded-full bg-[#C8102E] animate-pulse" />
-              <span className="text-xs font-semibold text-[#C8102E]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+              <span className="text-xs font-semibold text-[#C8102E]">
                 India Emergency Response Network
               </span>
             </div>
 
             {/* Headline */}
-            <h1 className="font-extrabold text-gray-900 leading-[1.05] mb-5" style={{ fontFamily: "'Inter', sans-serif" }}>
+            <h1 className="font-extrabold text-gray-900 leading-[1.05] mb-5">
               <span className="block text-5xl sm:text-6xl lg:text-7xl">When Every</span>
               <span className="block text-5xl sm:text-6xl lg:text-7xl text-[#C8102E]">Second Counts.</span>
             </h1>
 
             {/* Subtext */}
-            <p className="text-gray-500 text-lg sm:text-xl max-w-lg mb-8 leading-relaxed" style={{ fontFamily: "'Basic', serif" }}>
+            <p className="text-gray-500 text-lg sm:text-xl max-w-lg mb-8 leading-relaxed">
               Ambulance tracking, hospital discovery, police coordination, and AI verification — one tap away.
             </p>
 
@@ -213,9 +213,9 @@ export default function Home() {
       <section id="features" className="py-20 px-4 bg-gray-50">
         <div className="max-w-5xl mx-auto">
           <div className="flex flex-col items-center text-center mb-12">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#C8102E] mb-3" style={{ fontFamily: "'JetBrains Mono', monospace" }}>FEATURES</span>
+            <span className="text-xs font-bold uppercase tracking-widest text-[#C8102E] mb-3">FEATURES</span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4">Everything you need in a crisis</h2>
-            <p className="text-gray-500 max-w-md text-base" style={{ fontFamily: "'Basic', serif" }}>
+            <p className="text-gray-500 max-w-md text-base">
               LifeLine+ combines real-time data, AI, and live coordination so you always get the fastest possible help.
             </p>
           </div>
@@ -240,9 +240,9 @@ export default function Home() {
       <section className="py-20 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
           <div className="flex flex-col items-center text-center mb-14">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#C8102E] mb-3" style={{ fontFamily: "'JetBrains Mono', monospace" }}>HOW IT WORKS</span>
+            <span className="text-xs font-bold uppercase tracking-widest text-[#C8102E] mb-3">HOW IT WORKS</span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4">Help in 3 simple steps</h2>
-            <p className="text-gray-500 max-w-md text-base" style={{ fontFamily: "'Basic', serif" }}>
+            <p className="text-gray-500 max-w-md text-base">
               From tap to arrival — we handle everything so you can focus on what matters most.
             </p>
           </div>
@@ -260,7 +260,7 @@ export default function Home() {
                       </div>
                     </div>
                     <div className="absolute -top-2 -right-2 w-7 h-7 bg-white border-2 border-gray-100 rounded-full flex items-center justify-center shadow-sm">
-                      <span className="text-[10px] font-black text-[#C8102E]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{step.num}</span>
+                      <span className="text-[10px] font-black text-[#C8102E]">{step.num}</span>
                     </div>
                   </div>
                   <h3 className="font-bold text-gray-900 mb-2 text-lg">{step.title}</h3>
@@ -294,9 +294,9 @@ export default function Home() {
       <section className="py-20 px-4 bg-gray-50">
         <div className="max-w-5xl mx-auto">
           <div className="flex flex-col items-center text-center mb-12">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#C8102E] mb-3" style={{ fontFamily: "'JetBrains Mono', monospace" }}>TOP DOCTORS</span>
+            <span className="text-xs font-bold uppercase tracking-widest text-[#C8102E] mb-3">TOP DOCTORS</span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4">Trusted specialists, nearby</h2>
-            <p className="text-gray-500 max-w-md text-base" style={{ fontFamily: "'Basic', serif" }}>
+            <p className="text-gray-500 max-w-md text-base">
               Book an appointment with a verified specialist in minutes.
             </p>
           </div>
@@ -389,9 +389,9 @@ export default function Home() {
       <section className="py-20 px-4 bg-gray-50">
         <div className="max-w-4xl mx-auto">
           <div className="flex flex-col items-center text-center mb-12">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#C8102E] mb-3" style={{ fontFamily: "'JetBrains Mono', monospace" }}>THE TEAM</span>
+            <span className="text-xs font-bold uppercase tracking-widest text-[#C8102E] mb-3">THE TEAM</span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4">Built with purpose</h2>
-            <p className="text-gray-500 max-w-md text-base" style={{ fontFamily: "'Basic', serif" }}>
+            <p className="text-gray-500 max-w-md text-base">
               We are the <strong>LifeLine+</strong> team — built for rapid emergency response across India.
             </p>
           </div>
@@ -419,9 +419,9 @@ export default function Home() {
       <section id="contact" className="py-20 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
           <div className="flex flex-col items-center text-center mb-12">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#C8102E] mb-3" style={{ fontFamily: "'JetBrains Mono', monospace" }}>CONTACT US</span>
+            <span className="text-xs font-bold uppercase tracking-widest text-[#C8102E] mb-3">CONTACT US</span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4">We are here 24/7</h2>
-            <p className="text-gray-500 max-w-md text-base" style={{ fontFamily: "'Basic', serif" }}>
+            <p className="text-gray-500 max-w-md text-base">
               For emergencies, feedback, partnerships, or technical support — reach us anytime.
             </p>
           </div>
