@@ -205,7 +205,7 @@ export default function Home() {
         {/* Emergency CTA */}
         <button
           onClick={handleEmergency}
-          className="w-full mt-3 bg-white text-red-600 font-bold py-3 rounded-xl shadow-lg flex items-center justify-center gap-2 hover:bg-red-50 transition-colors active:scale-[0.98]"
+          className="w-full mt-3 bg-white text-red-600 font-bold py-3 rounded-xl shadow-md flex items-center justify-center gap-2 transition-colors"
         >
           <Ambulance size={20} />
           <span>EMERGENCY — Get Help Now</span>
@@ -218,10 +218,10 @@ export default function Home() {
           <button
             onClick={() => handleServiceTypeChange('hospital')}
             disabled={loading}
-            className={`p-4 rounded-2xl text-center transition-all ${
+            className={`p-4 rounded-2xl text-center transition-colors ${
               serviceType === 'hospital'
-                ? 'bg-gradient-to-br from-red-500 to-red-600 text-white shadow-lg'
-                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 shadow-sm hover:bg-red-50 dark:hover:bg-red-900/20'
+                ? 'bg-gradient-to-br from-red-500 to-red-600 text-white shadow-md'
+                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-100 dark:border-gray-700'
             } ${loading ? 'opacity-60' : ''}`}
           >
             <div className={`w-14 h-14 mx-auto rounded-xl flex items-center justify-center mb-2 overflow-hidden ${
@@ -247,10 +247,10 @@ export default function Home() {
           <button
             onClick={() => handleServiceTypeChange('police')}
             disabled={loading}
-            className={`p-4 rounded-2xl text-center transition-all ${
+            className={`p-4 rounded-2xl text-center transition-colors ${
               serviceType === 'police'
-                ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg'
-                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 shadow-sm hover:bg-blue-50 dark:hover:bg-blue-900/20'
+                ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md'
+                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-100 dark:border-gray-700'
             } ${loading ? 'opacity-60' : ''}`}
           >
             <div className={`w-14 h-14 mx-auto rounded-xl flex items-center justify-center mb-2 overflow-hidden ${
@@ -276,10 +276,10 @@ export default function Home() {
           <button
             onClick={() => handleServiceTypeChange('doctor')}
             disabled={loading}
-            className={`p-4 rounded-2xl text-center transition-all ${
+            className={`p-4 rounded-2xl text-center transition-colors ${
               serviceType === 'doctor'
-                ? 'bg-gradient-to-br from-amber-500 to-amber-600 text-white shadow-lg'
-                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 shadow-sm hover:bg-amber-50 dark:hover:bg-amber-900/20'
+                ? 'bg-gradient-to-br from-amber-500 to-amber-600 text-white shadow-md'
+                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-100 dark:border-gray-700'
             } ${loading ? 'opacity-60' : ''}`}
           >
             <div className={`w-14 h-14 mx-auto rounded-xl flex items-center justify-center mb-2 overflow-hidden ${
@@ -305,10 +305,10 @@ export default function Home() {
           <button
             onClick={() => handleServiceTypeChange('pharmacy')}
             disabled={loading}
-            className={`p-4 rounded-2xl text-center transition-all ${
+            className={`p-4 rounded-2xl text-center transition-colors ${
               serviceType === 'pharmacy'
-                ? 'bg-gradient-to-br from-green-500 to-green-600 text-white shadow-lg'
-                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 shadow-sm hover:bg-green-50 dark:hover:bg-green-900/20'
+                ? 'bg-gradient-to-br from-green-500 to-green-600 text-white shadow-md'
+                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-100 dark:border-gray-700'
             } ${loading ? 'opacity-60' : ''}`}
           >
             <div className={`w-14 h-14 mx-auto rounded-xl flex items-center justify-center mb-2 overflow-hidden ${
@@ -457,8 +457,8 @@ export default function Home() {
                   setSelectedService(service)
                   setMapCenter(service.location)
                 }}
-                className={`card flex gap-4 items-start cursor-pointer transition-all ${
-                  isSelected ? 'ring-2 ring-red-500 bg-red-50 dark:bg-red-900/10' : 'hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                className={`card flex gap-4 items-start cursor-pointer transition-colors ${
+                  isSelected ? 'ring-2 ring-red-500 bg-red-50 dark:bg-red-900/10' : ''
                 }`}
               >
                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${serviceIcons[serviceType].color}`}>

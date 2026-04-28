@@ -12,18 +12,9 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.dark-mode-toggle:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px -2px rgba(0, 0, 0, 0.1);
-}
-
-.dark .dark-mode-toggle:hover {
-  box-shadow: 0 4px 12px -2px rgba(255, 255, 255, 0.1);
-}
-
-/* Lower edge glow for toggle */
+/* Lower edge glow for toggle - subtle */
 .toggle-glow:hover {
-  box-shadow: 0 4px 15px -3px var(--glow-color, rgba(239, 68, 68, 0.4));
+  box-shadow: 0 2px 8px -2px var(--glow-color, rgba(239, 68, 68, 0.2));
 }
 
 @layer base {
